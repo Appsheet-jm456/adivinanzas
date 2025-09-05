@@ -19,52 +19,487 @@
       --wrong:#ef4444;
       --button:#1b2336;
       --border:#2b3a55;
+      --success:#10b981;
     }
+    
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(1200px 600px at 10% -20%,#1f2a44,transparent),var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;padding:24px;font-size:18px}
-    .container{width:min(1100px,100%);display:grid;gap:18px}
-    header{display:flex;justify-content:space-between;align-items:center;gap:14px}
-    h1{font-size:clamp(36px,5.5vw,56px);margin:0;font-weight:800;letter-spacing:.2px;color:var(--brand-primary)}
-    h2{font-size:clamp(24px,3.2vw,34px);font-weight:800;margin:10px 0 6px}
-    .card{background:var(--card);backdrop-filter:blur(6px);border:2px solid var(--border);border-radius:22px;padding:22px;box-shadow:0 18px 40px #0006}
-    .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-    .muted{color:var(--muted);font-size:16px}
-    input[type="text"]{flex:1;min-width:260px;background:#0b1220;color:var(--text);border:2px solid var(--border);border-radius:14px;padding:14px 16px;font-size:20px;outline:none}
-    input[type="text"]:focus{border-color:var(--brand-primary);box-shadow:0 0 0 4px #32d6e333}
-    button{background:var(--button);color:var(--text);border:2px solid var(--border);border-radius:14px;padding:12px 18px;font-size:18px;cursor:pointer;font-weight:700}
-    button:hover{filter:brightness(1.08)}
-    .btn-primary{background:var(--brand-primary);border-color:#15b5c2;color:#06242a}
-    .tag{display:inline-block;border:2px dashed var(--border);border-radius:999px;padding:8px 12px;font-size:14px}
-    .status{font-weight:800}
-    .status.ok{color:var(--accent)}
-    .status.bad{color:var(--wrong)}
-    .img-wrap{display:grid;place-items:center;margin:10px 0}
-    .img-wrap img{max-width:100%;border-radius:16px;border:2px solid var(--border)}
-    .progress{height:10px;background:#0b1220;border:2px solid var(--border);border-radius:999px;overflow:hidden}
-    .progress>div{height:100%;background:linear-gradient(90deg,var(--brand-primary),#60a5fa);width:0%}
-    .pill{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:#0b1220;border:2px solid var(--border);font-weight:700}
-    .pill .small{font-weight:600;color:var(--muted);font-size:14px}
-    footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:radial-gradient(1200px 600px at 10% -20%,#1f2a44,transparent),
+                linear-gradient(135deg, #0b0f19 0%, #162033 50%, #0b0f19 100%);
+      color:var(--text);
+      font-family:'Inter','Segoe UI',Roboto,Ubuntu,Helvetica,Arial,sans-serif;
+      padding:24px;
+      font-size:18px;
+      overflow-x:hidden;
+    }
+    
+    .container{
+      width:min(1100px,100%);
+      display:grid;
+      gap:18px;
+      animation:fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    
+    h1{
+      font-size:clamp(36px,5.5vw,56px);
+      margin:0;
+      font-weight:800;
+      letter-spacing:-0.5px;
+      background:linear-gradient(135deg, var(--brand-primary), #60e3f0);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    
+    h2{
+      font-size:clamp(24px,3.2vw,34px);
+      font-weight:700;
+      margin:20px 0 15px;
+      line-height:1.3;
+    }
+    
+    .card{
+      background:var(--card);
+      backdrop-filter:blur(12px);
+      border:2px solid var(--border);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4),
+                 0 0 60px rgba(50,214,227,0.1);
+      transition:transform 0.3s ease;
+    }
+    
+    .card:hover{
+      transform:translateY(-2px);
+    }
+    
+    .row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    
+    .muted{
+      color:var(--muted);
+      font-size:16px;
+      margin-bottom:8px;
+    }
+    
+    input[type="text"], input[type="password"]{
+      flex:1;
+      min-width:260px;
+      background:rgba(11,18,32,0.8);
+      color:var(--text);
+      border:2px solid var(--border);
+      border-radius:16px;
+      padding:14px 18px;
+      font-size:18px;
+      outline:none;
+      transition:all 0.3s ease;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus{
+      border-color:var(--brand-primary);
+      box-shadow:0 0 0 4px rgba(50,214,227,0.2),
+                 inset 0 0 20px rgba(50,214,227,0.05);
+      background:rgba(11,18,32,0.95);
+    }
+    
+    button{
+      background:var(--button);
+      color:var(--text);
+      border:2px solid var(--border);
+      border-radius:16px;
+      padding:12px 20px;
+      font-size:17px;
+      cursor:pointer;
+      font-weight:600;
+      transition:all 0.3s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    button::before{
+      content:'';
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:0;
+      height:0;
+      background:rgba(255,255,255,0.1);
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      transition:width 0.4s, height 0.4s;
+    }
+    
+    button:hover::before{
+      width:300px;
+      height:300px;
+    }
+    
+    button:hover{
+      transform:translateY(-2px);
+      box-shadow:0 4px 20px rgba(0,0,0,0.3);
+      filter:brightness(1.1);
+    }
+    
+    button:active{
+      transform:translateY(0);
+    }
+    
+    .btn-primary{
+      background:linear-gradient(135deg, var(--brand-primary), #15b5c2);
+      border:none;
+      color:#06242a;
+      font-weight:700;
+      box-shadow:0 4px 20px rgba(50,214,227,0.3);
+    }
+    
+    .btn-primary:hover{
+      box-shadow:0 6px 30px rgba(50,214,227,0.5);
+    }
+    
+    .btn-hint{
+      background:rgba(139,92,246,0.15);
+      border-color:rgba(139,92,246,0.5);
+      color:#c4b5fd;
+    }
+    
+    .btn-hint:hover{
+      background:rgba(139,92,246,0.25);
+      border-color:#8b5cf6;
+    }
+    
+    .btn-hint:disabled{
+      opacity:0.4;
+      cursor:not-allowed;
+    }
+    
+    .tag{
+      display:inline-block;
+      border:2px dashed var(--border);
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:14px;
+      background:rgba(50,214,227,0.05);
+    }
+    
+    .status{
+      font-weight:700;
+      font-size:18px;
+      padding:8px 16px;
+      border-radius:12px;
+      display:inline-block;
+      animation:slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn{
+      from{opacity:0;transform:translateX(20px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+    
+    .status.ok{
+      color:var(--success);
+      background:rgba(16,185,129,0.1);
+      border:2px solid rgba(16,185,129,0.3);
+    }
+    
+    .status.bad{
+      color:var(--wrong);
+      background:rgba(239,68,68,0.1);
+      border:2px solid rgba(239,68,68,0.3);
+    }
+    
+    .hint-box{
+      background:rgba(139,92,246,0.1);
+      border:2px solid rgba(139,92,246,0.3);
+      border-radius:16px;
+      padding:12px 16px;
+      margin-top:12px;
+      color:#c4b5fd;
+      animation:fadeIn 0.3s ease;
+    }
+    
+    .img-wrap{
+      display:grid;
+      place-items:center;
+      margin:20px 0;
+      animation:fadeIn 0.5s ease;
+    }
+    
+    .img-wrap img{
+      max-width:100%;
+      max-height:300px;
+      border-radius:20px;
+      border:3px solid var(--border);
+      box-shadow:0 10px 40px rgba(0,0,0,0.3);
+    }
+    
+    .progress{
+      height:12px;
+      background:rgba(11,18,32,0.8);
+      border:2px solid var(--border);
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:20px;
+      position:relative;
+    }
+    
+    .progress>div{
+      height:100%;
+      background:linear-gradient(90deg,var(--brand-primary),#60a5fa);
+      width:0%;
+      transition:width 0.5s ease;
+      box-shadow:0 0 20px rgba(50,214,227,0.5);
+      position:relative;
+    }
+    
+    .progress>div::after{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+      animation:shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer{
+      0%{transform:translateX(-100%)}
+      100%{transform:translateX(100%)}
+    }
+    
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(11,18,32,0.8);
+      border:2px solid var(--border);
+      font-weight:600;
+      box-shadow:0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .pill strong{
+      color:var(--brand-primary);
+      font-size:20px;
+    }
+    
+    .pill .small{
+      font-weight:500;
+      color:var(--muted);
+      font-size:14px;
+    }
+    
+    footer{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      padding-top:20px;
+      border-top:1px solid var(--border);
+      margin-top:20px;
+    }
+    
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
 
-    /* Overlay PIN */
-    .gate{position:fixed;inset:0;background:rgba(5,8,15,.92);display:grid;place-items:center;z-index:50}
-    .gate .panel{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:28px;max-width:520px;width:90%;text-align:center;box-shadow:0 20px 50px #0009}
-    .gate h3{margin:0 0 10px 0;font-size:clamp(24px,4vw,36px);font-weight:800;color:var(--brand-primary)}
-    .gate p{color:var(--muted);margin:0 0 14px 0}
-    .gate input{width:100%;background:#0b1220;color:var(--text);border:2px solid var(--border);border-radius:14px;padding:12px 14px;font-size:20px}
-    .gate button{margin-top:12px;width:100%}
+    /* Overlay PIN mejorado */
+    .gate{
+      position:fixed;
+      inset:0;
+      background:rgba(5,8,15,0.95);
+      display:grid;
+      place-items:center;
+      z-index:50;
+      backdrop-filter:blur(10px);
+    }
+    
+    .gate .panel{
+      background:var(--card);
+      border:2px solid var(--border);
+      border-radius:28px;
+      padding:36px;
+      max-width:480px;
+      width:90%;
+      text-align:center;
+      box-shadow:0 25px 80px rgba(0,0,0,0.5),
+                 0 0 80px rgba(50,214,227,0.15);
+      animation:scaleIn 0.4s ease;
+    }
+    
+    @keyframes scaleIn{
+      from{opacity:0;transform:scale(0.9)}
+      to{opacity:1;transform:scale(1)}
+    }
+    
+    .gate h3{
+      margin:0 0 12px 0;
+      font-size:clamp(28px,4vw,40px);
+      font-weight:800;
+      background:linear-gradient(135deg, var(--brand-primary), #60e3f0);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    
+    .gate p{
+      color:var(--muted);
+      margin:0 0 20px 0;
+      font-size:18px;
+    }
+    
+    .gate input{
+      width:100%;
+      margin-bottom:16px;
+      text-align:center;
+      font-size:22px;
+      letter-spacing:8px;
+    }
+    
+    .gate button{
+      width:100%;
+      padding:14px;
+      font-size:18px;
+    }
+    
+    #pinMsg{
+      color:var(--wrong);
+      font-weight:600;
+      animation:shake 0.3s;
+    }
+    
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      25%{transform:translateX(-5px)}
+      75%{transform:translateX(5px)}
+    }
+    
+    /* Confetti animation */
+    .confetti{
+      position:fixed;
+      width:10px;
+      height:10px;
+      background:var(--brand-primary);
+      position:absolute;
+      animation:confetti-fall 3s ease-out forwards;
+    }
+    
+    @keyframes confetti-fall{
+      0%{transform:translateY(-100vh) rotate(0deg);opacity:1}
+      100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+    }
+
+    /* Game complete overlay */
+    .complete-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(5,8,15,0.95);
+      display:none;
+      place-items:center;
+      z-index:100;
+      backdrop-filter:blur(10px);
+    }
+    
+    .complete-panel{
+      background:var(--card);
+      border:3px solid var(--brand-primary);
+      border-radius:32px;
+      padding:40px;
+      text-align:center;
+      max-width:500px;
+      width:90%;
+      box-shadow:0 30px 100px rgba(50,214,227,0.4);
+      animation:scaleIn 0.5s ease;
+    }
+    
+    .complete-panel h2{
+      font-size:clamp(32px,5vw,48px);
+      margin:0 0 20px 0;
+      background:linear-gradient(135deg, var(--brand-primary), #60e3f0);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    
+    .trophy{
+      font-size:72px;
+      margin:20px 0;
+      animation:bounce 1s ease infinite;
+    }
+    
+    @keyframes bounce{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-10px)}
+    }
+    
+    .score-display{
+      font-size:24px;
+      font-weight:700;
+      color:var(--brand-primary);
+      margin:20px 0;
+    }
+    
+    .btn-restart{
+      margin-top:20px;
+      padding:14px 32px;
+      font-size:18px;
+    }
   </style>
 </head>
 <body>
   <!-- Overlay de PIN -->
   <div class="gate" id="gate">
     <div class="panel">
-      <h3>Ingresa tu PIN</h3>
+      <h3>🔐 Ingresa tu PIN</h3>
       <p>Clave para iniciar el juego</p>
-      <input id="pinInput" type="password" placeholder="PIN"/>
-      <button id="pinBtn" class="btn-primary">Entrar</button>
-      <div class="muted" id="pinMsg" style="margin-top:8px"></div>
+      <input id="pinInput" type="password" placeholder="••••" maxlength="10" autocomplete="off"/>
+      <button id="pinBtn" class="btn-primary">Entrar al Juego</button>
+      <div class="muted" id="pinMsg" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- Overlay de juego completado -->
+  <div class="complete-overlay" id="completeOverlay">
+    <div class="complete-panel">
+      <div class="trophy">🏆</div>
+      <h2>¡Felicidades!</h2>
+      <p style="color:var(--muted);font-size:18px">Has completado todas las adivinanzas</p>
+      <div class="score-display">
+        Puntuación Final: <span id="finalScore">0</span> / <span id="finalMax">0</span>
+      </div>
+      <div id="performance" style="margin:20px 0;font-size:18px"></div>
+      <button class="btn-primary btn-restart" onclick="restartGame()">Jugar de Nuevo</button>
     </div>
   </div>
 
@@ -88,32 +523,28 @@
 
       <div class="row">
         <label class="sr-only" for="answer">Tu respuesta</label>
-        <input type="text" id="answer" placeholder="Escribe tu respuesta" autocomplete="off" />
+        <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." autocomplete="off" />
         <button class="btn-primary" id="checkBtn">Comprobar</button>
       </div>
 
-      <div class="row" style="margin-top:8px">
-        <button id="hint1Btn">Pista 1</button>
-        <button id="hint2Btn">Pista 2</button>
+      <div class="row" style="margin-top:12px">
+        <button class="btn-hint" id="hint1Btn">💡 Pista 1</button>
+        <button class="btn-hint" id="hint2Btn">✨ Pista 2</button>
         <div class="tag">Puntaje: 100 sin pistas · 50 con 1 · 25 con 2</div>
       </div>
 
-      <div class="row" style="justify-content:space-between;margin-top:10px">
-        <div class="muted" id="hint"></div>
-        <div class="status" id="status"></div>
-      </div>
+      <div id="hintContainer" style="margin-top:12px"></div>
+      <div id="statusContainer" style="margin-top:12px;text-align:center"></div>
 
-      <div class="progress" style="margin-top:14px"><div id="bar"></div></div>
+      <div class="progress"><div id="bar"></div></div>
     </div>
 
     <footer class="muted">
-      <div>
-        © Kinetic English — Plantilla libre de uso
-      </div>
+      <div>© 2025 Kinetic English — Juego Educativo Interactivo</div>
     </footer>
   </div>
 
-  <!-- Audios opcionales -->
+  <!-- Audios opcionales (comentados por ahora) -->
   <audio id="snd-correct" preload="auto"></audio>
   <audio id="snd-wrong" preload="auto"></audio>
   <audio id="snd-click" preload="auto"></audio>
@@ -125,16 +556,67 @@
        ========================== */
     const CONFIG = {
       title: "Kinetic English · Adivinanzas",
-      category: "Módulo 1 · Vocabulario: Animales",
+      category: "Módulo 1 · Vocabulario: Animales y Naturaleza",
       allowAccentFree: true,
-      gate: { enabled: true, pin: "2025" }, // PIN para iniciar
-      // Sonidos (sube tus mp3 a assets/sfx/ y pon las rutas)
-      sounds: { correct: "", wrong: "", click: "", hint: "" },
-      messages: { correct: "¡Excelente! ¡Lo lograste!", incorrect: "Sigue intentando, ¡tú puedes!" },
+      gate: { 
+        enabled: true, 
+        pin: "2025"  // PIN para acceder al juego
+      },
+      // Configuración de sonidos (puedes agregar URLs de sonidos MP3)
+      sounds: { 
+        correct: "", 
+        wrong: "", 
+        click: "", 
+        hint: "" 
+      },
+      messages: { 
+        correct: "¡Excelente! ¡Lo lograste! 🎉", 
+        incorrect: "No es correcto, pero sigue intentando 💪" 
+      },
+      // ADIVINANZAS - Puedes agregar más aquí
       items: [
-        { clue: "Tengo rayas blancas y negras, y parezco caballo. ¿Quién soy?", answer: "cebra", hint1: "Comienza por 'ce'...", hint2: "Vive en África.", image: "assets/img/cebra.jpg" },
-        { clue: "No soy gato ni perro, digo 'muuu' y doy leche.", answer: "vaca", hint1: "Rima con 'taca'", hint2: "Animal de granja.", image: "" },
-        { clue: "Vuelo sin alas y lloro sin ojos. ¿Qué soy?", answer: "nube", hint1: "A veces tapa el sol", hint2: "Está en el cielo.", image: "assets/img/nube.jpg" }
+        { 
+          clue: "Tengo rayas blancas y negras, y parezco un caballo. ¿Quién soy?", 
+          answer: "cebra", 
+          hint1: "Comienza con la letra 'C'", 
+          hint2: "Vive en las sabanas de África",
+          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Plains_Zebra_Equus_quagga.jpg/220px-Plains_Zebra_Equus_quagga.jpg"
+        },
+        { 
+          clue: "No soy gato ni perro, digo 'muuu' y doy leche. ¿Qué soy?", 
+          answer: "vaca", 
+          hint1: "Rima con 'flaca'", 
+          hint2: "Es un animal de granja muy común",
+          image: ""
+        },
+        { 
+          clue: "Vuelo sin alas y lloro sin ojos. ¿Qué soy?", 
+          answer: "nube", 
+          hint1: "A veces tapa el sol", 
+          hint2: "Está en el cielo y trae lluvia",
+          image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Appearance_of_sky_for_weather_forecast%2C_Dhaka%2C_Bangladesh.JPG/220px-Appearance_of_sky_for_weather_forecast%2C_Dhaka%2C_Bangladesh.JPG"
+        },
+        {
+          clue: "Soy el rey de la selva, tengo melena y rujo fuerte. ¿Quién soy?",
+          answer: "león",
+          hint1: "Mi nombre tiene 4 letras",
+          hint2: "Soy un felino grande y poderoso",
+          image: ""
+        },
+        {
+          clue: "Tengo ocho patas y tejo una red. ¿Qué soy?",
+          answer: "araña",
+          hint1: "Empiezo con la letra 'A'",
+          hint2: "Algunos me temen, pero ayudo controlando insectos",
+          image: ""
+        },
+        {
+          clue: "Soy redondo como una pelota, naranja y me usan en Halloween. ¿Qué soy?",
+          answer: "calabaza",
+          hint1: "Soy una verdura",
+          hint2: "Me tallan caras para asustar",
+          image: ""
+        }
       ]
     };
 
@@ -147,8 +629,8 @@
     const imageWrap = document.getElementById('imageWrap');
     const imageEl = document.getElementById('image');
     const answerEl = document.getElementById('answer');
-    const statusEl = document.getElementById('status');
-    const hintEl = document.getElementById('hint');
+    const statusContainer = document.getElementById('statusContainer');
+    const hintContainer = document.getElementById('hintContainer');
     const barEl = document.getElementById('bar');
 
     const pointsEl = document.getElementById('points');
@@ -173,21 +655,34 @@
       if(CONFIG.sounds?.click)   SND.click.src   = CONFIG.sounds.click;
       if(CONFIG.sounds?.hint)    SND.hint.src    = CONFIG.sounds.hint;
     }
-    function play(name){ try{ SND[name]?.currentTime = 0; SND[name]?.play(); }catch(e){} }
+    
+    function play(name){ 
+      try{ 
+        if(SND[name] && SND[name].src){
+          SND[name].currentTime = 0; 
+          SND[name].play(); 
+        }
+      }catch(e){} 
+    }
 
-    const normalize = (s) => CONFIG.allowAccentFree
-      ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
-      : s.toLowerCase().trim();
+    const normalize = (s) => {
+      if(!s) return '';
+      return CONFIG.allowAccentFree
+        ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+        : s.toLowerCase().trim();
+    }
 
     let index = 0;
     let totalScore = 0;
-    let hintLevel = 0; // 0: sin pistas (100) · 1: una pista (50) · 2: dos pistas (25)
+    let hintLevel = 0;
+    let isProcessing = false;
 
-    const items = CONFIG.items.map(v=>({v,r:Math.random()})).sort((a,b)=>a.r-b.r).map(({v})=>v);
+    // Mezclar las adivinanzas aleatoriamente
+    const items = [...CONFIG.items].sort(() => Math.random() - 0.5);
     const MAX_POINTS = items.length * 100;
 
     function setProgress(){
-      const pct = ((index) / items.length) * 100;
+      const pct = (index / items.length) * 100;
       barEl.style.width = pct + '%';
       pointsEl.textContent = totalScore;
       maxpointsEl.textContent = MAX_POINTS;
@@ -195,116 +690,127 @@
       totalEl.textContent = items.length;
     }
 
+    function showCompleteScreen(){
+      const completeOverlay = document.getElementById('completeOverlay');
+      const finalScore = document.getElementById('finalScore');
+      const finalMax = document.getElementById('finalMax');
+      const performance = document.getElementById('performance');
+      
+      finalScore.textContent = totalScore;
+      finalMax.textContent = MAX_POINTS;
+      
+      const percentage = (totalScore / MAX_POINTS) * 100;
+      let message = '';
+      let emoji = '';
+      
+      if(percentage === 100){
+        message = '¡Perfecto! Eres un maestro de las adivinanzas';
+        emoji = '🌟🏆🌟';
+      } else if(percentage >= 80){
+        message = '¡Excelente trabajo! Casi perfecto';
+        emoji = '🎯';
+      } else if(percentage >= 60){
+        message = '¡Buen trabajo! Sigue practicando';
+        emoji = '👍';
+      } else if(percentage >= 40){
+        message = 'No está mal, pero puedes mejorar';
+        emoji = '💪';
+      } else {
+        message = 'Necesitas más práctica, ¡inténtalo de nuevo!';
+        emoji = '📚';
+      }
+      
+      performance.innerHTML = `${emoji}<br>${message}`;
+      completeOverlay.style.display = 'grid';
+      
+      // Crear efecto de confetti
+      for(let i = 0; i < 30; i++){
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 3000);
+        }, i * 50);
+      }
+    }
+
+    function restartGame(){
+      index = 0;
+      totalScore = 0;
+      hintLevel = 0;
+      isProcessing = false;
+      
+      // Remezclar items
+      items.sort(() => Math.random() - 0.5);
+      
+      const completeOverlay = document.getElementById('completeOverlay');
+      completeOverlay.style.display = 'none';
+      
+      loadItem();
+    }
+
     function loadItem(){
-      const it = items[index];
-      if(!it){
-        riddleEl.textContent = '¡Juego completado!';
-        statusEl.textContent = `Puntuación final: ${totalScore} de ${MAX_POINTS}`;
-        hintEl.textContent = '';
-        answerEl.disabled = true;
-        checkBtn.disabled = true;
-        hint1Btn.disabled = true;
-        hint2Btn.disabled = true;
+      if(index >= items.length){
+        showCompleteScreen();
         return;
       }
+      
+      const it = items[index];
       titleEl.textContent = CONFIG.title || 'Adivinanzas';
-      categoryEl.textContent = CONFIG.category || '—';
+      categoryEl.textContent = CONFIG.category || 'General';
       riddleEl.textContent = it.clue;
-      hintEl.textContent = '';
-      statusEl.textContent = '';
+      hintContainer.innerHTML = '';
+      statusContainer.innerHTML = '';
       answerEl.value = '';
       answerEl.focus();
       hintLevel = 0;
-      hint1Btn.disabled = false; hint2Btn.disabled = false;
-      if(it.image){ imageEl.src = it.image; imageWrap.hidden = false; } else { imageWrap.hidden = true; }
+      isProcessing = false;
+      
+      hint1Btn.disabled = false; 
+      hint2Btn.disabled = false;
+      checkBtn.disabled = false;
+      answerEl.disabled = false;
+      
+      if(it.image){ 
+        imageEl.src = it.image; 
+        imageWrap.hidden = false; 
+      } else { 
+        imageWrap.hidden = true; 
+      }
+      
       setProgress();
     }
 
-    function pointsFor(h){ return h===0?100 : h===1?50 : 25; }
+    function pointsFor(h){ 
+      return h === 0 ? 100 : h === 1 ? 50 : 25; 
+    }
 
     function check(){
-      const it = items[index]; if(!it) return;
-      const got = normalize(answerEl.value);
-      const ok = normalize(it.answer) === got;
-      if(ok){
+      if(isProcessing) return;
+      const it = items[index];
+      if(!it) return;
+      
+      const userAnswer = normalize(answerEl.value);
+      const correctAnswer = normalize(it.answer);
+      
+      if(!userAnswer){
+        statusContainer.innerHTML = '<div class="status bad">Por favor escribe una respuesta</div>';
+        return;
+      }
+      
+      isProcessing = true;
+      checkBtn.disabled = true;
+      answerEl.disabled = true;
+      
+      const isCorrect = userAnswer === correctAnswer;
+      
+      if(isCorrect){
         const earned = pointsFor(hintLevel);
         totalScore += earned;
-        statusEl.textContent = `${CONFIG.messages?.correct || '¡Correcto!'} (+${earned} pts)`;
-        statusEl.className = 'status ok';
+        statusContainer.innerHTML = `<div class="status ok">${CONFIG.messages?.correct || '¡Correcto!'} (+${earned} pts)</div>`;
         play('correct');
-      }else{
-        statusEl.textContent = `${CONFIG.messages?.incorrect || 'Incorrecto.'} Respuesta: ${it.answer} (+0 pts)`;
-        statusEl.className = 'status bad';
-        play('wrong');
-      }
-      index++;
-      setProgress();
-      setTimeout(loadItem, 900);
-    }
-
-    function showHint(level){
-      const it = items[index]; if(!it) return;
-      if(level === 1){
-        hintEl.textContent = it.hint1 ? `💡 ${it.hint1}` : 'Sin pista 1.';
-        hintLevel = Math.max(hintLevel,1);
-        hint1Btn.disabled = true; play('hint');
-      }else{
-        hintEl.textContent = (it.hint1||it.hint2) ? `${it.hint1?`💡 ${it.hint1}\n`:''}${it.hint2?`✨ ${it.hint2}`:''}` : 'Sin pista 2.';
-        hintLevel = 2; hint1Btn.disabled = true; hint2Btn.disabled = true; play('hint');
-      }
-    }
-
-    // ======= Acceso con PIN (arreglo aplicado) =======
-    function initGate(){
-      const gateEl = document.getElementById('gate');
-      const gameWrapEl = document.getElementById('gameWrap');
-
-      if(!CONFIG.gate?.enabled){
-        gameWrapEl.style.display='block';
-        loadItem();
-        return;
-      }
-      // Bypass por URL: ?pin=2025
-      const params=new URLSearchParams(window.location.search);
-      const urlPin=params.get('pin');
-      if(urlPin && urlPin===String(CONFIG.gate.pin)){
-        gateEl.style.display='none';
-        gameWrapEl.style.display='block';
-        loadItem();
-        return;
-      }
-      const pinBtn=document.getElementById('pinBtn');
-      const pinInput=document.getElementById('pinInput');
-      const pinMsg=document.getElementById('pinMsg');
-
-      function proceed(){
-        gateEl.style.display='none';
-        gameWrapEl.style.display='block';
-        try{ play('click'); }catch(e){}
-        loadItem();
-      }
-      function checkPin(){
-        const value=(pinInput.value||'').trim();
-        if(value===String(CONFIG.gate.pin)){
-          proceed();
-        }else{
-          pinMsg.textContent='PIN incorrecto';
-        }
-      }
-      pinBtn.addEventListener('click', checkPin);
-      pinInput.addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
-    }
-
-    // Eventos
-    answerEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter') check(); });
-    checkBtn.addEventListener('click', check);
-    hint1Btn.addEventListener('click', ()=>showHint(1));
-    hint2Btn.addEventListener('click', ()=>showHint(2));
-
-    // Inicio
-    initSounds();
-    setProgress();
-    initGate();
-  </script>
-</body>
-</html>
+      } else {
+        statusContainer.innerHTML = `<div class="status bad">${CONFIG.messages?.incorrect || 'Incorrecto'}<br>La respuesta era: <strong>${it.answer}</strong> (+0 pts)
