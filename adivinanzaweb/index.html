@@ -32,13 +32,13 @@
 
   <script>
     // 🔐 Configura aquí tu PIN
-    const PIN = "2025"; // ← cámbialo a tu gusto
+    const PIN = "2025"; // cámbialo si quieres
 
     const pinInput = document.getElementById('pin');
     const goBtn = document.getElementById('go');
     const msg = document.getElementById('msg');
 
-    // Permite entrar directo con ?pin=XXXX (útil para pruebas)
+    // Permite entrar directo con ?pin=XXXX (útil para pruebas):
     const urlPin = new URLSearchParams(location.search).get('pin');
     if (urlPin && urlPin === PIN) {
       sessionStorage.setItem('ke_gate', 'ok');
@@ -59,3 +59,4 @@
   </script>
 </body>
 </html>
+
