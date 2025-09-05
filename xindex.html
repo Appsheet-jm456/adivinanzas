@@ -254,27 +254,45 @@
       }
     }
 
-    // ======= Acceso con PIN =======
+    // ======= Acceso con PIN (arreglo aplicado) =======
     function initGate(){
-      if(!CONFIG.gate?.enabled){ document.getElementById('gameWrap').style.display='block'; loadItem(); return; }
+      const gateEl = document.getElementById('gate');
+      const gameWrapEl = document.getElementById('gameWrap');
+
+      if(!CONFIG.gate?.enabled){
+        gameWrapEl.style.display='block';
+        loadItem();
+        return;
+      }
+      // Bypass por URL: ?pin=2025
       const params=new URLSearchParams(window.location.search);
       const urlPin=params.get('pin');
       if(urlPin && urlPin===String(CONFIG.gate.pin)){
-        document.getElementById('gate').style.display='none';
-        document.getElementById('gameWrap').style.display='block';
-        loadItem(); return;
+        gateEl.style.display='none';
+        gameWrapEl.style.display='block';
+        loadItem();
+        return;
       }
       const pinBtn=document.getElementById('pinBtn');
       const pinInput=document.getElementById('pinInput');
       const pinMsg=document.getElementById('pinMsg');
-      function checkPin(){
-        if(pinInput.value===String(CONFIG.gate.pin)){
-          document.getElementById('gate').style.display='none';
-          document.getElementById('gameWrap').style.display='block';
-          play('click'); loadItem();
-        } else { pinMsg.textContent='PIN incorrecto'; }
+
+      function proceed(){
+        gateEl.style.display='none';
+        gameWrapEl.style.display='block';
+        try{ play('click'); }catch(e){}
+        loadItem();
       }
-      pinBtn.onclick=checkPin; pinInput.onkeydown=e=>{if(e.key==='Enter')checkPin();};
+      function checkPin(){
+        const value=(pinInput.value||'').trim();
+        if(value===String(CONFIG.gate.pin)){
+          proceed();
+        }else{
+          pinMsg.textContent='PIN incorrecto';
+        }
+      }
+      pinBtn.addEventListener('click', checkPin);
+      pinInput.addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
     }
 
     // Eventos
