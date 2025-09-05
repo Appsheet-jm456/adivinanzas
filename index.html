@@ -334,92 +334,6 @@
       border:0;
     }
 
-    /* Overlay PIN mejorado */
-    .gate{
-      position:fixed;
-      inset:0;
-      background:rgba(5,8,15,0.95);
-      display:grid;
-      place-items:center;
-      z-index:50;
-      backdrop-filter:blur(10px);
-    }
-    
-    .gate .panel{
-      background:var(--card);
-      border:2px solid var(--border);
-      border-radius:28px;
-      padding:36px;
-      max-width:480px;
-      width:90%;
-      text-align:center;
-      box-shadow:0 25px 80px rgba(0,0,0,0.5),
-                 0 0 80px rgba(50,214,227,0.15);
-      animation:scaleIn 0.4s ease;
-    }
-    
-    @keyframes scaleIn{
-      from{opacity:0;transform:scale(0.9)}
-      to{opacity:1;transform:scale(1)}
-    }
-    
-    .gate h3{
-      margin:0 0 12px 0;
-      font-size:clamp(28px,4vw,40px);
-      font-weight:800;
-      background:linear-gradient(135deg, var(--brand-primary), #60e3f0);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    
-    .gate p{
-      color:var(--muted);
-      margin:0 0 20px 0;
-      font-size:18px;
-    }
-    
-    .gate input{
-      width:100%;
-      margin-bottom:16px;
-      text-align:center;
-      font-size:22px;
-      letter-spacing:8px;
-    }
-    
-    .gate button{
-      width:100%;
-      padding:14px;
-      font-size:18px;
-    }
-    
-    #pinMsg{
-      color:var(--wrong);
-      font-weight:600;
-      animation:shake 0.3s;
-    }
-    
-    @keyframes shake{
-      0%,100%{transform:translateX(0)}
-      25%{transform:translateX(-5px)}
-      75%{transform:translateX(5px)}
-    }
-    
-    /* Confetti animation */
-    .confetti{
-      position:fixed;
-      width:10px;
-      height:10px;
-      background:var(--brand-primary);
-      position:absolute;
-      animation:confetti-fall 3s ease-out forwards;
-    }
-    
-    @keyframes confetti-fall{
-      0%{transform:translateY(-100vh) rotate(0deg);opacity:1}
-      100%{transform:translateY(100vh) rotate(720deg);opacity:0}
-    }
-
     /* Game complete overlay */
     .complete-overlay{
       position:fixed;
@@ -441,6 +355,11 @@
       width:90%;
       box-shadow:0 30px 100px rgba(50,214,227,0.4);
       animation:scaleIn 0.5s ease;
+    }
+    
+    @keyframes scaleIn{
+      from{opacity:0;transform:scale(0.9)}
+      to{opacity:1;transform:scale(1)}
     }
     
     .complete-panel h2{
@@ -478,17 +397,6 @@
   </style>
 </head>
 <body>
-  <!-- Overlay de PIN -->
-  <div class="gate" id="gate">
-    <div class="panel">
-      <h3>🔐 Ingresa tu PIN</h3>
-      <p>Clave para iniciar el juego</p>
-      <input id="pinInput" type="password" placeholder="••••" maxlength="10" autocomplete="off"/>
-      <button id="pinBtn" class="btn-primary">Entrar al Juego</button>
-      <div class="muted" id="pinMsg" style="margin-top:12px"></div>
-    </div>
-  </div>
-
   <!-- Overlay de juego completado -->
   <div class="complete-overlay" id="completeOverlay">
     <div class="complete-panel">
@@ -503,7 +411,7 @@
     </div>
   </div>
 
-  <div class="container" id="gameWrap" style="display:none">
+  <div class="container" id="gameWrap">
     <header>
       <h1 id="game-title">Adivinanzas</h1>
       <div class="pill">
@@ -544,12 +452,6 @@
     </footer>
   </div>
 
-  <!-- Audios opcionales (comentados por ahora) -->
-  <audio id="snd-correct" preload="auto"></audio>
-  <audio id="snd-wrong" preload="auto"></audio>
-  <audio id="snd-click" preload="auto"></audio>
-  <audio id="snd-hint" preload="auto"></audio>
-
   <script>
     /* ==========================
        🔧 CONFIGURACIÓN RÁPIDA
@@ -558,22 +460,11 @@
       title: "Kinetic English · Adivinanzas",
       category: "Módulo 1 · Vocabulario: Animales y Naturaleza",
       allowAccentFree: true,
-      gate: { 
-        enabled: true, 
-        pin: "2025"  // PIN para acceder al juego
-      },
-      // Configuración de sonidos (puedes agregar URLs de sonidos MP3)
-      sounds: { 
-        correct: "", 
-        wrong: "", 
-        click: "", 
-        hint: "" 
-      },
       messages: { 
         correct: "¡Excelente! ¡Lo lograste! 🎉", 
         incorrect: "No es correcto, pero sigue intentando 💪" 
       },
-      // ADIVINANZAS - Puedes agregar más aquí
+      // ADIVINANZAS - Puedes agregar o modificar las que quieras
       items: [
         { 
           clue: "Tengo rayas blancas y negras, y parezco un caballo. ¿Quién soy?", 
@@ -642,29 +533,6 @@
     const hint1Btn = document.getElementById('hint1Btn');
     const hint2Btn = document.getElementById('hint2Btn');
 
-    const SND = {
-      correct: document.getElementById('snd-correct'),
-      wrong: document.getElementById('snd-wrong'),
-      click: document.getElementById('snd-click'),
-      hint: document.getElementById('snd-hint'),
-    };
-
-    function initSounds(){
-      if(CONFIG.sounds?.correct) SND.correct.src = CONFIG.sounds.correct;
-      if(CONFIG.sounds?.wrong)   SND.wrong.src   = CONFIG.sounds.wrong;
-      if(CONFIG.sounds?.click)   SND.click.src   = CONFIG.sounds.click;
-      if(CONFIG.sounds?.hint)    SND.hint.src    = CONFIG.sounds.hint;
-    }
-    
-    function play(name){ 
-      try{ 
-        if(SND[name] && SND[name].src){
-          SND[name].currentTime = 0; 
-          SND[name].play(); 
-        }
-      }catch(e){} 
-    }
-
     const normalize = (s) => {
       if(!s) return '';
       return CONFIG.allowAccentFree
@@ -722,19 +590,6 @@
       
       performance.innerHTML = `${emoji}<br>${message}`;
       completeOverlay.style.display = 'grid';
-      
-      // Crear efecto de confetti
-      for(let i = 0; i < 30; i++){
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.style.left = Math.random() * 100 + '%';
-          confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-          confetti.style.animationDelay = Math.random() * 0.5 + 's';
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 3000);
-        }, i * 50);
-      }
     }
 
     function restartGame(){
@@ -811,6 +666,56 @@
         const earned = pointsFor(hintLevel);
         totalScore += earned;
         statusContainer.innerHTML = `<div class="status ok">${CONFIG.messages?.correct || '¡Correcto!'} (+${earned} pts)</div>`;
-        play('correct');
       } else {
-        statusContainer.innerHTML = `<div class="status bad">${CONFIG.messages?.incorrect || 'Incorrecto'}<br>La respuesta era: <strong>${it.answer}</strong> (+0 pts)
+        statusContainer.innerHTML = `<div class="status bad">${CONFIG.messages?.incorrect || 'Incorrecto'}<br>La respuesta era: <strong>${it.answer}</strong> (+0 pts)</div>`;
+      }
+      
+      index++;
+      setProgress();
+      
+      setTimeout(() => {
+        loadItem();
+      }, 2000);
+    }
+
+    function showHint(level){
+      const it = items[index];
+      if(!it) return;
+      
+      if(level === 1){
+        if(it.hint1){
+          hintContainer.innerHTML = `<div class="hint-box">💡 ${it.hint1}</div>`;
+          hintLevel = Math.max(hintLevel, 1);
+          hint1Btn.disabled = true;
+        }
+      } else if(level === 2){
+        let hints = '';
+        if(it.hint1) hints += `💡 ${it.hint1}`;
+        if(it.hint2) hints += `${it.hint1 ? '<br>' : ''}✨ ${it.hint2}`;
+        
+        if(hints){
+          hintContainer.innerHTML = `<div class="hint-box">${hints}</div>`;
+          hintLevel = 2;
+          hint1Btn.disabled = true;
+          hint2Btn.disabled = true;
+        }
+      }
+    }
+
+    // Eventos
+    answerEl.addEventListener('keydown', (e) => { 
+      if(e.key === 'Enter') check(); 
+    });
+    
+    checkBtn.addEventListener('click', check);
+    hint1Btn.addEventListener('click', () => showHint(1));
+    hint2Btn.addEventListener('click', () => showHint(2));
+
+    // Inicio del juego
+    window.addEventListener('DOMContentLoaded', () => {
+      setProgress();
+      loadItem();
+    });
+  </script>
+</body>
+</html>
